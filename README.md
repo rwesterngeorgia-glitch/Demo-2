@@ -6,7 +6,7 @@ A premium fictional Mediterranean restaurant in Philadelphia, paired with a work
 
 - Website: https://ember-olive-demo.pages.dev
 - Management studio: https://ember-olive-demo.pages.dev/admin
-- Repository: https://github.com/rwesterngeorgia-glitch/ember-olive-restaurant-demo
+- Repository: https://github.com/rwesterngeorgia-glitch/Demo-2
 
 ## Features
 
@@ -73,3 +73,4 @@ The create command runs once only. Cloudflare Pages serves SPA routes by falling
 ## Assets & marketing
 
 See [ASSETS.md](ASSETS.md) for photo/font licenses. `marketing/` contains actual application screenshots, social graphics, promotional browser recording, captions and Reel script/storyboard. All promotional copy identifies the work as a fictional portfolio concept. Nothing is posted to social media.
+
