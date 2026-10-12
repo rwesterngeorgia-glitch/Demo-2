@@ -1,5 +1,73 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+test("reservation validation rejects missing slot and closed Monday", async ({
+  page,
+}) => {
+  await page.goto("/reservations");
+  await page.getByLabel("Fictional guest name").fill("Validation Demo");
+  await page.getByLabel("Demo email").fill("validation@example.com");
+  await page.getByRole("checkbox").check();
+  await page.getByRole("button", { name: "Request demo table" }).click();
+  await expect(page.getByRole("alert")).toContainText(
+    "Choose an available time",
+  );
+  const date = new Date();
+  while (date.getDay() !== 1) date.setDate(date.getDate() + 1);
+  await page
+    .getByLabel("Date", { exact: true })
+    .fill(
+      `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`,
+    );
+  await expect(page.getByText("We rest on Mondays.")).toBeVisible();
+  await expect(page.locator(".time-slots button")).toHaveCount(0);
+});
+test("image upload is validated and saved to the public menu", async ({
+  page,
+}) => {
+  await page.goto("/admin/menu");
+  await page
+    .getByRole("button", { name: "Edit Whipped feta & warm pita" })
+    .click();
+  await page
+    .locator("input[type=file]")
+    .setInputFiles({
+      name: "invalid.txt",
+      mimeType: "text/plain",
+      buffer: Buffer.from("not an image"),
+    });
+  await expect(page.getByRole("alert")).toContainText("JPG, PNG, or WebP");
+  await page
+    .locator("input[type=file]")
+    .setInputFiles("public/images/dessert.jpg");
+  await page.getByRole("button", { name: "Save dish" }).click();
+  await page.goto("/menu");
+  const article = page
+    .locator("article")
+    .filter({
+      has: page.getByRole("heading", { name: "Whipped feta & warm pita" }),
+    });
+  await expect(article.locator("img")).toHaveAttribute(
+    "src",
+    /^data:image\/jpeg;base64,/,
+  );
+});
+test("capacity cannot be reduced below active reservations", async ({
+  page,
+}) => {
+  await page.goto("/admin/reservations");
+  await page.getByRole("button", { name: "Configure availability" }).click();
+  const row = page
+    .locator(".slot-editor")
+    .filter({
+      has: page.getByRole("checkbox", { name: "18:00", exact: true }),
+    });
+  await row.locator("input[type=number]").fill("1");
+  await page.getByRole("button", { name: "Save availability" }).click();
+  await expect(page.getByRole("dialog").getByRole("alert")).toContainText(
+    "Capacity cannot be lower",
+  );
+  await expect(page.getByRole("dialog")).toBeVisible();
+});
 test("public pages navigate and render without overflow or console errors", async ({
   page,
 }) => {

@@ -274,7 +274,7 @@ function Featured() {
   return (
     <div className="dish-feature-grid">
       {data.dishes
-        .filter((d) => d.available)
+        .filter((d) => d.available && ["d1", "d5", "d7"].includes(d.id))
         .slice(0, 3)
         .map((d, i) => (
           <Link to="/menu" key={d.id} className="dish-feature">

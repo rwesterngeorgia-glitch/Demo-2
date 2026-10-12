@@ -53,6 +53,7 @@ function Modal({
   return (
     <dialog
       ref={ref}
+      aria-label={title}
       onCancel={onClose}
       onClick={(e) => {
         if (e.target === e.currentTarget) onClose();
