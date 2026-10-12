@@ -12,7 +12,7 @@ Verified October 12, 2026. All data used in testing was fictional. Browser conte
 | npm dependency audit | 0 vulnerabilities after updating Sharp to 0.35.5 |
 | Local Playwright suite | 22 / 22 passed |
 | Public deployment Playwright suite | 28 / 28 passed at https://ember-olive-demo.pages.dev |
-| Viewports | Chromium desktop 1280 × 720 and emulated iPhone 13 390 × 664 |
+| Viewports | Chromium desktop 1280 × 720 and emulated iPhone 13 390 × 664; additional live tablet smoke checks at 820 × 1180 |
 | Accessibility | axe-core WCAG 2 A/AA and WCAG 2.1 AA scans across all 10 public/admin routes; no detected violations in tested states |
 | Console/runtime | No page errors across tested routes |
 | Images & navigation | All route headings render, images decode, no document-level horizontal overflow |
@@ -28,4 +28,5 @@ Problems discovered and repaired include text contrast, keyboard access to scrol
 Automated accessibility tests complement, but do not certify, full accessibility. Native Safari/Firefox and physical mobile devices were not tested. No actual customer data, real emails, protected admin authentication, production database, table-duration inventory, or integrations exist. This is an intentionally isolated browser-local demonstration. Storage quotas vary by browser; a visible error explains persistence failures. Seed dates remain as saved until reset. Sample operations metrics are clearly labeled.
 
 Cloudflare Pages uses a static SPA fallback and direct upload. GitHub does not automatically trigger deployment; rebuild and upload after edits. No paid services, custom domain, social posting, or unrelated project changes were made.
+
 
