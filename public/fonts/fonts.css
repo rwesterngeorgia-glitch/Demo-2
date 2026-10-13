@@ -3,20 +3,20 @@
   font-style: italic;
   font-weight: 400;
   font-display: swap;
-  src: url(/fonts/cormorant-1.ttf) format('truetype');
+  src: url(/fonts/cormorant-1.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Cormorant Garamond';
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(/fonts/cormorant-2.ttf) format('truetype');
+  src: url(/fonts/cormorant-2.woff2) format('woff2');
 }
 @font-face {
   font-family: 'Cormorant Garamond';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url(/fonts/cormorant-3.ttf) format('truetype');
+  src: url(/fonts/cormorant-3.woff2) format('woff2');
 }
 

@@ -40,6 +40,7 @@ test("image upload is validated and saved to the public menu", async ({
     .locator("input[type=file]")
     .setInputFiles("public/images/dessert.jpg");
   await page.getByRole("button", { name: "Save dish" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
   await page.goto("/menu");
   const article = page
     .locator("article")
@@ -168,6 +169,7 @@ test("add edit and hide a dish updates public menu and persists", async ({
       exact: true,
     })
     .click();
+  await expect(page.locator('#root')).not.toHaveAttribute('aria-busy', 'true');
   await page.goto("/menu");
   await expect(
     page.getByRole("heading", { name: "Fire-roasted demo aubergine" }),
@@ -200,6 +202,7 @@ test("reservation flows into admin and can be confirmed cancelled and viewed in 
   await page.getByRole("button", { name: "Calendar", exact: true }).click();
   await expect(page.getByText("Avery Test", { exact: true })).toBeVisible();
   await page.getByLabel("Status for Avery Test").selectOption("Cancelled");
+  await expect(page.getByText('Avery Test: Cancelled', { exact: true })).toBeVisible();
   await page.reload();
   await page.getByLabel("Search guests").fill("Avery");
   await expect(page.getByLabel("Status for Avery Test")).toHaveValue(
@@ -211,6 +214,7 @@ test("slot settings change public availability", async ({ page }) => {
   await page.getByRole("button", { name: "Configure availability" }).click();
   await page.getByRole("checkbox", { name: "17:00", exact: true }).uncheck();
   await page.getByRole("button", { name: "Save availability" }).click();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
   await page.goto("/reservations");
   const input = page.getByLabel("Date", { exact: true });
   const date = new Date();
@@ -256,6 +260,7 @@ test("checklists owners and manager notes persist", async ({ page }) => {
     .getByLabel("Service notes", { exact: true })
     .fill("Fictional service note for testing.");
   await page.getByRole("button", { name: "Save notes" }).click();
+  await expect(page.getByText('Manager notes saved in this browser.',{exact:true})).toBeVisible();
   await page.reload();
   await expect(page.getByLabel("Service notes", { exact: true })).toHaveValue(
     "Fictional service note for testing.",
@@ -302,6 +307,7 @@ test("browser visitors are isolated", async ({ browser }) => {
   await expect(
     q.getByRole("heading", { name: "Whipped feta & warm pita" }),
   ).toBeVisible();
+  await expect(p.locator('#root')).not.toHaveAttribute('aria-busy', 'true');
   await p.goto("/menu");
   await expect(
     p.getByRole("heading", { name: "Whipped feta & warm pita" }),

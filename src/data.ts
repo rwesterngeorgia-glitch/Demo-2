@@ -88,6 +88,7 @@ export const imageOptions = [
   ["/images/dessert.jpg", "Dessert"],
   ["/images/interior.jpg", "Dining room"],
 ];
+export function serviceDate(offset=0, now=new Date()) {const day=new Date(now);day.setDate(day.getDate()+offset);while(day.getDay()===1)day.setDate(day.getDate()+1);return localDate(day);}
 export function seed(): Demo {
   return {
     dishes: [
@@ -215,7 +216,7 @@ export function seed(): Demo {
         id: "r1",
         name: "Alex Morgan",
         email: "alex@example.com",
-        date: today(),
+        date: serviceDate(),
         time: "18:00",
         party: 4,
         status: "Confirmed",
@@ -225,7 +226,7 @@ export function seed(): Demo {
         id: "r2",
         name: "Jamie Ellis",
         email: "jamie@example.com",
-        date: today(),
+        date: serviceDate(),
         time: "18:30",
         party: 2,
         status: "Requested",
@@ -235,7 +236,7 @@ export function seed(): Demo {
         id: "r3",
         name: "Robin Lane",
         email: "robin@example.com",
-        date: today(),
+        date: serviceDate(),
         time: "19:00",
         party: 6,
         status: "Confirmed",
@@ -245,7 +246,7 @@ export function seed(): Demo {
         id: "r4",
         name: "Taylor Reed",
         email: "taylor@example.com",
-        date: offsetDate(1),
+        date: serviceDate(1),
         time: "19:30",
         party: 3,
         status: "Confirmed",
@@ -279,13 +280,13 @@ export function seed(): Demo {
       },
     ],
     shifts: [
-      { id: "sh1", staffId: "s1", date: today(), start: "16:00", end: "23:00" },
-      { id: "sh2", staffId: "s2", date: today(), start: "14:00", end: "22:00" },
-      { id: "sh3", staffId: "s3", date: today(), start: "17:00", end: "23:00" },
+      { id: "sh1", staffId: "s1", date: serviceDate(), start: "16:00", end: "23:00" },
+      { id: "sh2", staffId: "s2", date: serviceDate(), start: "14:00", end: "22:00" },
+      { id: "sh3", staffId: "s3", date: serviceDate(), start: "17:00", end: "23:00" },
       {
         id: "sh4",
         staffId: "s4",
-        date: offsetDate(2),
+        date: serviceDate(2),
         start: "17:00",
         end: "23:00",
       },
