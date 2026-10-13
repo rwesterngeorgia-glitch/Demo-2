@@ -729,7 +729,7 @@ function Contact() {
   const { update } = useDemo();
   const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
-  function submit(e: FormEvent<HTMLFormElement>) {
+  async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     const name = String(f.get("name")).trim(),
@@ -741,13 +741,13 @@ function Contact() {
       );
       return;
     }
-    update(
+    if (!await update(
       (d) => ({
         ...d,
         messages: [{ id: uid(), name, email, message }, ...d.messages],
       }),
       "Demo contact message saved locally",
-    );
+    )) return;
     setSent(true);
   }
   return (

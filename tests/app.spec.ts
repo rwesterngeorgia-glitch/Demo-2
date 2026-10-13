@@ -256,6 +256,7 @@ test("checklists owners and manager notes persist", async ({ page }) => {
     .getByLabel("Service notes", { exact: true })
     .fill("Fictional service note for testing.");
   await page.getByRole("button", { name: "Save notes" }).click();
+  await expect(page.getByText('Manager notes saved in this browser.',{exact:true})).toBeVisible();
   await page.reload();
   await expect(page.getByLabel("Service notes", { exact: true })).toHaveValue(
     "Fictional service note for testing.",

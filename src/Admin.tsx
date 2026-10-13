@@ -178,8 +178,8 @@ export default function Admin() {
             </button>
             <button
               className="button"
-              onClick={() => {
-                reset();
+              onClick={async () => {
+                if (!await reset()) return;
                 setResetOpen(false);
                 setNotice("Demo reset to fictional sample data.");
               }}
@@ -289,8 +289,8 @@ function Overview() {
               <input
                 type="checkbox"
                 checked={t.done}
-                onChange={() =>
-                  update(
+                onChange={async () =>
+                  await update(
                     (d) => ({
                       ...d,
                       tasks: d.tasks.map((x) =>
@@ -476,8 +476,8 @@ function MenuStudio() {
   const [filter, setFilter] = useState("All");
   const [query, setQuery] = useState("");
   const [notice, setNotice] = useState("");
-  function save(dish: Dish) {
-    update(
+  async function save(dish: Dish) {
+    if (!await update(
       (d) => ({
         ...d,
         dishes: d.dishes.some((x) => x.id === dish.id)
@@ -485,7 +485,7 @@ function MenuStudio() {
           : [...d.dishes, dish],
       }),
       `Menu saved · ${dish.name}`,
-    );
+    )) return;
     setEditing(null);
     setNotice(
       "Dish saved. The public menu reflects your changes in this browser.",
@@ -588,8 +588,8 @@ function MenuStudio() {
                       <button
                         className={`badge availability ${d.available ? "confirmed" : "cancelled"}`}
                         aria-label={`${d.available ? "Mark unavailable" : "Mark available"}: ${d.name}`}
-                        onClick={() =>
-                          update(
+                        onClick={async () =>
+                          await update(
                             (x) => ({
                               ...x,
                               dishes: x.dishes.map((a) =>
@@ -834,7 +834,7 @@ function ReservationStudio() {
   const [notice, setNotice] = useState("");
   const [slotOpen, setSlotOpen] = useState(false);
   const [slots, setSlots] = useState(data.slots);
-  function status(r: Reservation, value: Reservation["status"]) {
+  async function status(r: Reservation, value: Reservation["status"]) {
     if (
       value !== "Cancelled" &&
       value !== "Completed" &&
@@ -846,7 +846,7 @@ function ReservationStudio() {
       );
       return;
     }
-    update(
+    if (!await update(
       (d) => ({
         ...d,
         reservations: d.reservations.map((x) =>
@@ -854,7 +854,7 @@ function ReservationStudio() {
         ),
       }),
       `Reservation ${value.toLowerCase()} · ${r.name}`,
-    );
+    )) return;
     setError("");
     setNotice(`${r.name}: ${value}`);
   }
@@ -1018,7 +1018,7 @@ function ReservationStudio() {
             measured in guests; active reservations consume seats.
           </p>
           <form
-            onSubmit={(e) => {
+            onSubmit={async (e) => {
               e.preventDefault();
               const maxUsed = slots.some((s) =>
                 Array.from(new Set(data.reservations.map((r) => r.date))).some(
@@ -1039,7 +1039,7 @@ function ReservationStudio() {
                 );
                 return;
               }
-              update((d) => ({ ...d, slots }), "Demo availability updated");
+              if (!await update((d) => ({ ...d, slots }), "Demo availability updated")) return;
               setError("");
               setNotice(
                 "Availability saved. Public booking slots now reflect these settings.",
@@ -1109,7 +1109,7 @@ function StaffStudio() {
     d.setDate(d.getDate() + i);
     return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   });
-  function save(e: FormEvent) {
+  async function save(e: FormEvent) {
     e.preventDefault();
     if (!editing) return;
     const err = shiftError(data.shifts, editing);
@@ -1117,7 +1117,7 @@ function StaffStudio() {
       setError(err);
       return;
     }
-    update(
+    if (!await update(
       (d) => ({
         ...d,
         shifts: d.shifts.some((s) => s.id === editing.id)
@@ -1125,7 +1125,7 @@ function StaffStudio() {
           : [...d.shifts, editing],
       }),
       "Staff shift saved",
-    );
+    )) return;
     setEditing(null);
     setError("");
     setNotice("Shift saved. Schedule updated.");
@@ -1321,14 +1321,14 @@ function StaffStudio() {
                 <button
                   type="button"
                   className="button secondary"
-                  onClick={() => {
-                    update(
+                  onClick={async () => {
+                    if (!await update(
                       (d) => ({
                         ...d,
                         shifts: d.shifts.filter((s) => s.id !== editing.id),
                       }),
                       "Demo shift removed",
-                    );
+                    )) return;
                     setEditing(null);
                     setNotice("Shift removed.");
                   }}
@@ -1386,8 +1386,8 @@ function Operations() {
                     <input
                       type="checkbox"
                       checked={t.done}
-                      onChange={() =>
-                        update(
+                      onChange={async () =>
+                        await update(
                           (d) => ({
                             ...d,
                             tasks: d.tasks.map((x) =>
@@ -1405,9 +1405,9 @@ function Operations() {
                     <select
                       aria-label={`Owner of ${t.name}`}
                       value={t.owner}
-                      onChange={(e) => {
+                      onChange={async (e) => {
                         const owner=e.target.value;
-                        update(
+                        if (!await update(
                           (d) => ({
                             ...d,
                             tasks: d.tasks.map((x) =>
@@ -1417,7 +1417,7 @@ function Operations() {
                             ),
                           }),
                           "Task ownership updated",
-                        );
+                        )) return;
                       }}
                     >
                       {data.staff.map((s) => (
@@ -1438,9 +1438,9 @@ function Operations() {
           A thought for tonight’s service. Use fictional operational notes only.
         </p>
         <form
-          onSubmit={(e) => {
+          onSubmit={async (e) => {
             e.preventDefault();
-            update((d) => ({ ...d, notes }), "Manager notes saved");
+            if (!await update((d) => ({ ...d, notes }), "Manager notes saved")) return;
             setNotice("Manager notes saved in this browser.");
           }}
         >
