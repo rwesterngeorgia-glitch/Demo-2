@@ -25,7 +25,7 @@ export default tseslint.config(
     languageOptions: { globals: globals.node },
   },
   {
-    files: ["scripts/marketing.mjs"],
+    files: ["scripts/marketing.mjs", "scripts/security-smoke.mjs"],
     languageOptions: { globals: { ...globals.node, ...globals.browser } },
   },
 );

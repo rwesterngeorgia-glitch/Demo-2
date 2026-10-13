@@ -1,0 +1,6 @@
+import { Component, type ReactNode } from 'react';
+export class RecoveryBoundary extends Component<{children:ReactNode},{failed:boolean;message:string}> {
+ state={failed:false,message:''};
+ static getDerivedStateFromError(){return {failed:true};}
+ render(){if(!this.state.failed)return this.props.children;return <main style={{padding:40,maxWidth:800,margin:'auto'}}><h1>This demo could not load</h1><p>You can download the saved browser data before resetting this fictional demo.</p><button onClick={()=>{try{const value=localStorage.getItem('ember-olive-demo-v1-recovery')??localStorage.getItem('ember-olive-demo-v1')??'{}';const url=URL.createObjectURL(new Blob([value],{type:'application/json'}));const link=document.createElement('a');link.href=url;link.download='ember-demo-recovery.json';link.click();URL.revokeObjectURL(url);}catch{this.setState({message:'Saved data is unavailable in this browser.'});}}}>Download saved demo data</button><button onClick={()=>{try{localStorage.removeItem('ember-olive-demo-v1');localStorage.removeItem('ember-olive-demo-v1-recovery');}catch{/* A fresh provider can run without storage. */}window.location.reload();}}>Reset local demo and reload</button>{this.state.message&&<p role="alert">{this.state.message}</p>}</main>;}
+}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, lazy, Suspense } from "react";
 import type { FormEvent } from "react";
 import { Link, NavLink, Route, Routes, useLocation } from "react-router-dom";
 import {
@@ -20,7 +20,7 @@ import {
   uid,
 } from "./data";
 import { useDemo } from "./store";
-import Admin from "./Admin";
+const Admin = lazy(() => import('./Admin'));
 function Brand() {
   return (
     <Link className="brand" to="/" aria-label="Ember and Olive home">
@@ -125,7 +125,10 @@ function Home() {
       <section className="hero">
         <img
           className="hero-photo"
-          src="/images/interior.jpg"
+          width="1800" height="1200"
+          src="/images/interior-1600.webp"
+          srcSet="/images/interior-800.webp 800w, /images/interior-1600.webp 1600w"
+          sizes="100vw"
           alt="Warmly lit dining room with carefully set tables"
           fetchPriority="high"
         />
@@ -505,7 +508,7 @@ function Reservations() {
   const available = data.slots.filter(
     (s) => s.enabled && seatsLeft(data, date, s.time) >= party,
   );
-  function submit(e: FormEvent<HTMLFormElement>) {
+  async function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
     if (!time || seatsLeft(data, date, time) < party) {
@@ -529,7 +532,7 @@ function Reservations() {
       return;
     }
     const id = uid();
-    update(
+    const stored = await update(
       (d) => ({
         ...d,
         reservations: [
@@ -548,6 +551,7 @@ function Reservations() {
       }),
       `Demo reservation requested · ${name} · ${prettyDate(date)} ${time}`,
     );
+    if(!stored){setError('This request was not saved. Review the browser-data warning and try again.');return;}
     setConfirmed(id);
     setError("");
   }
@@ -853,17 +857,18 @@ function Contact() {
 }
 export default function App() {
   const location = useLocation();
-  const { storageError } = useDemo();
+  const { storageError, exportRecovery } = useDemo();
   const admin = location.pathname.startsWith("/admin");
   return (
     <>
       {storageError && (
         <div className="storage-alert" role="alert">
           {storageError}
+          <button className="button small" onClick={exportRecovery}>Download saved data</button>
         </div>
       )}
       {admin ? (
-        <Admin />
+        <Suspense fallback={<p role="status">Loading demo workspace…</p>}><Admin /></Suspense>
       ) : (
         <>
           <a className="skip-link" href="#main">

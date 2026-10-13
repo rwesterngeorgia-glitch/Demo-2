@@ -1,4 +1,28 @@
-@import url("/fonts/fonts.css");
+.admin-nav-hint { display: none; }
+@media(max-width:700px) { .admin-nav-hint {display:block;font-size:12px;margin:16px 0 0;} }
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/cormorant-1.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(/fonts/cormorant-2.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(/fonts/cormorant-3.woff2) format('woff2');
+}
+
+
 :root {
   font-family: Arial, Helvetica, sans-serif;
   color: #292e25;

@@ -24,6 +24,7 @@ import {
   seatsLeft,
   shiftError,
   today,
+  serviceDate,
   uid,
 } from "./data";
 import type { Dish, Reservation, Shift } from "./data";
@@ -95,6 +96,7 @@ export default function Admin() {
           </span>
         </Link>
         <span className="sidebar-caption">YOUR RESTAURANT, IN RHYTHM</span>
+        <p className="admin-nav-hint">Scroll to see more sections →</p>
         <nav aria-label="Management navigation">
           {nav.map(([href, label, Icon]) => (
             <NavLink key={href} end={href === "/admin"} to={href}>
@@ -1142,7 +1144,7 @@ function StaffStudio() {
               setEditing({
                 id: uid(),
                 staffId: data.staff[0].id,
-                date: start,
+                date: serviceDate(0,new Date(start+'T12:00:00')),
                 start: "17:00",
                 end: "22:00",
               });
@@ -1403,19 +1405,20 @@ function Operations() {
                     <select
                       aria-label={`Owner of ${t.name}`}
                       value={t.owner}
-                      onChange={(e) =>
+                      onChange={(e) => {
+                        const owner=e.target.value;
                         update(
                           (d) => ({
                             ...d,
                             tasks: d.tasks.map((x) =>
                               x.id === t.id
-                                ? { ...x, owner: e.target.value }
+                                ? { ...x, owner }
                                 : x,
                             ),
                           }),
                           "Task ownership updated",
-                        )
-                      }
+                        );
+                      }}
                     >
                       {data.staff.map((s) => (
                         <option key={s.id} value={s.id}>
